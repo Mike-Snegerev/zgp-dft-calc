@@ -1,72 +1,44 @@
-# DFT & Raman Spectra Calculations of Pristine $\text{ZnGeP}_2$ (ZGP)
+# DFT & Raman Spectra Calculations of $\text{ZnGeP}_2$ (ZGP)
 
-В данном репозитории содержатся входные и расчетные файлы для первопринципного моделирования кристаллической решетки, фононного спектра и рамановской (КР) активности монокристалла фосфида цинка-германия ($\text{ZnGeP}_2$, ZGP).
-
----
-
-## 1. Какая программа используется?
-
-Расчеты выполнены в пакете **[Quantum ESPRESSO](https://www.quantum-espresso.org/)** (модули `pw.x`, `ph.x`, `dynmat.x`):
-- **`pw.x` (Plane-Wave Self-Consistent Field)**: решает уравнения Кона — Шэма методом псевдопотенциалов в базисе плоских волн для нахождения электронной плотности основного состояния.
-- **`ph.x` (PHonon)**: реализует теорию функционала плотности возмущений (Density Functional Perturbation Theory, DFPT) для расчета фононных частот в $\Gamma$-точке ($q = 0$), тензора диэлектрической проницаемости ($\epsilon_\infty$), эффективных зарядов Борна ($Z^*$) и нерезонансных рамановских активностей (`lraman = .true.`).
-- **`dynmat.x`**: производит постобработку динамической матрицы, накладывает акустическое правило сумм (Acoustic Sum Rule, ASR) и вычисляет поляризационные тензоры рамановского рассеяния и моды колебаний.
+This repository contains input and calculation files for first-principles modeling of the crystal lattice, phonon spectrum, and Raman activity of pristine zinc germanium phosphide single crystals ($\text{ZnGeP}_2$, ZGP).
 
 ---
 
-## 2. Физическая модель и параметры системы
+## 1. Software Used
 
-* **Материал:** $\text{ZnGeP}_2$ (структура халькопирита, пространственная группа $I\overline{4}2d$).
-* **Обменно-корреляционный функционал:** GGA-PBE (Perdew-Burke-Ernzerhof).
-* **Базис плоских волн:**
-  * Энергия обрезания волновых функций: $E_{\text{cut}} = 80.0\text{ Ry}$ (`ecutwfc`)
-  * Энергия обрезания плотности заряда: $E_{\text{cut,\rho}} = 320.0\text{ Ry}$ (`ecutrho`)
-* **Критерий сходимости SCF:** $10^{-10}\text{ Ry}$ (`conv_thr`).
-* **Порог сходимости DFPT:** $10^{-14}$ (`tr2_ph`).
+The calculations were performed using the **[Quantum ESPRESSO](https://www.quantum-espresso.org/)** package (`pw.x`, `ph.x`, and `dynmat.x` modules):
+- **`pw.x` (Plane-Wave Self-Consistent Field)**: Solves the Kohn–Sham equations using pseudopotentials within a plane-wave basis set to determine the ground-state electronic density.
+- **`ph.x` (PHonon)**: Implements Density Functional Perturbation Theory (DFPT) to calculate phonon frequencies at the $\Gamma$-point ($q = 0$), the dielectric tensor ($\epsilon_\infty$), Born effective charges ($Z^*$), and non-resonant Raman activities (`lraman = .true.`).
+- **`dynmat.x`**: Performs post-processing of the dynamical matrix, applies the Acoustic Sum Rule (ASR), and computes Raman scattering polarization tensors and vibrational modes.
 
 ---
 
-## 3. Структура файлов в репозитории
+## 2. Physical Model and System Parameters
+
+- **Material:** $\text{ZnGeP}_2$ (Chalcopyrite structure, space group $I\overline{4}2d$).
+- **Exchange-Correlation Functional:** GGA-PBE (Perdew-Burke-Ernzerhof).
+- **Plane-Wave Basis Set:**
+  * Wavefunction kinetic energy cutoff: $E_{\text{cut}} = 80.0\text{ Ry}$ (`ecutwfc`)
+  * Charge density kinetic energy cutoff: $E_{\text{cut,\rho}} = 320.0\text{ Ry}$ (`ecutrho`)
+- **SCF Convergence Threshold:** $10^{-10}\text{ Ry}$ (`conv_thr`).
+- **DFPT Convergence Threshold:** $10^{-14}$ (`tr2_ph`).
+
+---
+
+## 3. Repository Structure
 
 ```text
 zgp-dft-calc/
-├── README.md               # Подробное описание расчетов, физики и инструкция
-├── .gitignore              # Игнорирование служебных и тяжелых файлов
-├── pw.in / pw.out          # Самосогласованный расчет (SCF) основного состояния
-├── ph.in / ph.out          # DFPT расчет фононов и рамановской активности
-├── dynmat.in / dynmat.out  # Расчет мод и применение ASR (симметрия кристалла)
-├── dyn                     # Файл динамической матрицы
-├── dynmat.axsf             # Векторы смещения атомов для визуализации (XCrySDen / VESTA)
-├── dynmat.mold             # Файл мод в формате Molden / Jmol
-├── drho_e1, drho_e2, e3    # Отклик электронной плотности на внешнее электрическое поле (DFPT)
-└── pseudo/                 # Псевдопотенциалы для Zn, Ge, P (формат UPF)
+├── README.md               # Detailed description of calculations, physics, and instructions
+├── .gitignore              # Ignores service and heavy binary files
+├── pw.in / pw.out          # Ground-state self-consistent field (SCF) calculation
+├── ph.in / ph.out          # DFPT phonon and Raman activity calculation
+├── dynmat.in / dynmat.out  # Mode calculation and ASR application (crystal symmetry)
+├── dyn                     # Dynamical matrix file
+├── dynmat.axsf             # Atomic displacement vectors for visualization (XCrySDen / VESTA)
+├── dynmat.mold             # Vibrational modes in Molden / Jmol format
+├── drho_e1, drho_e2, e3    # Electronic density response to an external electric field (DFPT)
+└── pseudo/                 # Pseudopotentials for Zn, Ge, P (UPF format)
     ├── Zn.upf
     ├── Ge.upf
     └── P.upf
-```
-
----
-
-## 4. Этапы расчета (Workflows)
-
-### Шаг 1. Самосогласованный расчет электронной структуры (SCF)
-Вычисление волновых функций и электронной плотности нулевого порядка:
-```bash
-pw.x -in pw.in > pw.out
-```
-
-### Шаг 2. Расчет фононов и рамановских интенсивностей (DFPT)
-Вычисление динамической матрицы, тензора диэлектрической проницаемости и производных тензора поляризуемости по координатам атомов (`lraman = .true.`):
-```bash
-ph.x -in ph.in > ph.out
-```
-
-### Шаг 3. Диагонализация динамической матрицы
-Наложение акустического правила сумм (`asr = 'crystal'`) и вывод рамановских тензоров и частот:
-```bash
-dynmat.x -in dynmat.in > dynmat.out
-```
-
----
-
-## 5. Лицензия
-Открытый проект для научно-исследовательских целей (MIT License).
