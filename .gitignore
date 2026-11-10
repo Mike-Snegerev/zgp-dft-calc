@@ -1,0 +1,15 @@
+# Quantum ESPRESSO heavy binary cache and temp folders
+out/
+*.save/
+_the_i_matrix/
+*.phsave/
+*.wfc*
+*.charge*
+*.igk*
+
+# Windows Alternate Data Streams (Zone.Identifier)
+*Zone.Identifier*
+
+# OS specific files
+.DS_Store
+Thumbs.db

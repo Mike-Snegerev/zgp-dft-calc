@@ -1,0 +1,6 @@
+&input 
+  fildyn='dyn',
+  asr='crystal' 
+  q(1)=0.0, q(2)=0.0, q(3)=0.0
+/
+
