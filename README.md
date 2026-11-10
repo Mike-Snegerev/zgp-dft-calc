@@ -19,7 +19,7 @@ The calculations were performed using the **[Quantum ESPRESSO](https://www.quant
 - **Exchange-Correlation Functional:** GGA-PBE (Perdew-Burke-Ernzerhof).
 - **Plane-Wave Basis Set:**
 Wavefunction kinetic energy cutoff: $E_{\text{cut}} = 80.0\text{ Ry}$ (`ecutwfc`)
-Charge density kinetic energy cutoff: $E_{\text{cut_rho}} = 320.0\text{ Ry}$ (`ecutrho`)
+Charge density kinetic energy cutoff: $E_{\text{cutrho}} = 320.0\text{ Ry}$ (`ecutrho`)
 - **SCF Convergence Threshold:** $10^{-10}\text{ Ry}$ (`conv_thr`).
 - **DFPT Convergence Threshold:** $10^{-14}$ (`tr2_ph`).
 
